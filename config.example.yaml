@@ -1,0 +1,38 @@
+# Copy to config.yaml and edit. config.yaml is git-ignored.
+# NEVER put a private key here. The submitter reads it only from the PRIVATE_KEY env var.
+
+chain_id: 56
+rpc_urls:                      # first one is used for reads; all are used to broadcast
+  - https://bsc-rpc.publicnode.com
+  - https://bsc-dataseed.bnbchain.org
+
+# Public PEARL (PearlMiningV2) deployment on BSC mainnet. Change for other deployments.
+mining_contract: "0x7E2DA878217EB995F9e5d36eD32c9Cea52442681"
+registry: "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F"
+# Optional sanity checks (runtime code hashes); leave empty to skip.
+mining_code_hash: "0xb916afd1010340a39de43f2b564a836236e493f07fe8f0f3ee6c741550426821"
+registry_code_hash: "0xc4006e6e6ffaaf6996116617392beabe4f5f0a0795841322f91c2ceac34d6ace"
+
+wallet: "0xYOUR_WALLET_ADDRESS"   # the wallet that owns a registry handle; nonces are bound to it
+agent_id: ""                     # optional override; default = uint256(keccak256(handleOf(wallet)))
+
+miner:
+  gpu_devices: [0]               # CUDA device ids; use "all" for every GPU
+  count_per_device: 0            # stop after N nonces per device (0 = run until killed)
+  cpu_threads: 0                 # CPU fallback threads (0 = all cores)
+
+submit:
+  batch_size: 16                 # nonces per mineBatch tx (contract max 16)
+  concurrency: 4                 # parallel txs in flight
+  gas_limit: 0                   # 0 = estimate (x1.2); otherwise fixed
+  gas_price_gwei: 0              # 0 = use node's eth_gasPrice
+  min_reward_slippage_bps: 100   # minTotalReward = reward*n*(10000-bps)/10000 (100 = 1%)
+  min_native_balance: 0.005      # stop if BNB balance below this
+  max_consecutive_failures: 5
+  receipt_timeout: 120
+
+paths:
+  params: out/params.json        # written by fetch_challenge.py
+  nonce_glob: out/nonces_*.txt   # miner outputs
+  valid_nonces: out/valid_nonces.txt
+  submit_log: out/submit_log.csv

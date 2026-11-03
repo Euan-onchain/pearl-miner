@@ -1,0 +1,15 @@
+config.yaml
+.env
+*.env
+out/
+*.txt
+!requirements.txt
+*.log
+*.csv
+*.json
+!abi.json
+!config.example.json
+miner/pearl_miner
+miner/cpu_miner
+pid_*
+__pycache__/
